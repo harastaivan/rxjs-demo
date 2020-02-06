@@ -8,7 +8,7 @@ const addItem = (val: String) => {
     document.getElementById('output').appendChild(node);
 };
 
-const subject: ReplaySubject<String> = new ReplaySubject(2);
+const subject: ReplaySubject<String> = new ReplaySubject(30, 200);
 
 subject.subscribe(
     (data: any) => addItem('Observer 1: ' + data),
@@ -16,15 +16,9 @@ subject.subscribe(
     () => addItem('Observer 1 Completed')
 );
 
-subject.next('The first thing has been sent');
-subject.next('Another thing has been sent');
-subject.next('...Observer 2 is about to subscribe');
+let i = 1;
+var int = setInterval(() => subject.next((i++).toString()), 100);
 
-const subscription2: Subscription = subject.subscribe((data: String) => addItem('Observer 2: ' + data));
-
-subject.next('The second thing has been sent');
-subject.next('The third thing has been sent');
-
-subscription2.unsubscribe();
-
-subject.next('The final thing has been sent');
+setTimeout(() => {
+    subject.subscribe((data: String) => addItem('Observer 2: ' + data));
+}, 500);
