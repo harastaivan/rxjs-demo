@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Observer, Subscription } from 'rxjs';
+import 'rxjs/add/operator/share';
 
 const addItem = (val: string) => {
     const node = document.createElement('li');
@@ -19,7 +20,7 @@ const observable: Observable<string> = Observable.create((observer: Observer<str
     } catch (err) {
         observer.error(err);
     }
-});
+}).share(); // warm/hot observable
 
 const subscription: Subscription = observable.subscribe(
     (x: string) => addItem(x),
